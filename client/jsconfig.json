@@ -4,7 +4,7 @@
     "paths": {
       "~/*": ["./public/*"],
       "@/components/*": ["./components/*"],
-      "@/lib/*": ["./lib/*"],
+      "@/libs/*": ["./libs/*"],
       "@/styles/*": ["./styles/*"]
     }
   }

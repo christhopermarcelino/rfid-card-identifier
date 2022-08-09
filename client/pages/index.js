@@ -1,5 +1,5 @@
+import Dashboard from "@/components/Dashboard";
 import Head from "next/head";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -10,9 +10,11 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main>
-        <h1>RFIF Card Identifier</h1>
-      </main>
+      <Dashboard title='Dashboard'>
+        <main>
+          <h1>RFIF Card Identifier</h1>
+        </main>
+      </Dashboard>
     </div>
   );
 }
