@@ -3,9 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./public/*"],
+      "@/pages/*": ["./pages/*"],
       "@/components/*": ["./components/*"],
       "@/libs/*": ["./libs/*"],
-      "@/styles/*": ["./styles/*"]
+      "@/styles/*": ["./styles/*"],
+      "@/contexts/*": ["./contexts/*"]
     }
   }
 }

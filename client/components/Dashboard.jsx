@@ -2,27 +2,45 @@ import { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
   BellIcon,
-  HomeIcon,
   MenuAlt2Icon,
-  UsersIcon,
   XIcon,
+  PresentationChartLineIcon,
+  DocumentAddIcon,
+  DatabaseIcon,
 } from "@heroicons/react/outline";
 
 import { classNames } from "@/libs/helpers";
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon, current: true },
-  {
-    name: "Register Card",
-    href: "/register-card",
-    icon: UsersIcon,
-    current: false,
-  },
-  //   { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  //   { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  //   { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  //   { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
-];
+const navigation =
+  process.env.NODE_ENV === "production"
+    ? [
+        {
+          name: "Data Statistik",
+          href: "/",
+          icon: PresentationChartLineIcon,
+          current: true,
+        },
+      ]
+    : [
+        {
+          name: "Data Statistik",
+          href: "/",
+          icon: PresentationChartLineIcon,
+          current: true,
+        },
+        {
+          name: "Registrasi Kartu",
+          href: "/register-card",
+          icon: DocumentAddIcon,
+          current: false,
+        },
+        {
+          name: "Data Kartu",
+          href: "/data-card",
+          icon: DatabaseIcon,
+          current: false,
+        },
+      ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
@@ -186,53 +204,55 @@ export default function Dashboard({ title, children }) {
               </button>
 
               {/* Profile dropdown */}
-              <Menu as='div' className='relative ml-3'>
-                {({ open }) => (
-                  <>
-                    <div>
-                      <Menu.Button className='flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-                        <span className='sr-only'>Open user menu</span>
-                        <img
-                          className='w-8 h-8 rounded-full'
-                          src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                          alt=''
-                        />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      show={open}
-                      as={Fragment}
-                      enter='transition ease-out duration-100'
-                      enterFrom='transform opacity-0 scale-95'
-                      enterTo='transform opacity-100 scale-100'
-                      leave='transition ease-in duration-75'
-                      leaveFrom='transform opacity-100 scale-100'
-                      leaveTo='transform opacity-0 scale-95'
-                    >
-                      <Menu.Items
-                        static
-                        className='absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+              {process.env.NODE_ENV === "production" && (
+                <Menu as='div' className='relative ml-3'>
+                  {({ open }) => (
+                    <>
+                      <div>
+                        <Menu.Button className='flex items-center max-w-xs text-sm bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+                          <span className='sr-only'>Open user menu</span>
+                          <img
+                            className='w-8 h-8 rounded-full'
+                            src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                            alt=''
+                          />
+                        </Menu.Button>
+                      </div>
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        enter='transition ease-out duration-100'
+                        enterFrom='transform opacity-0 scale-95'
+                        enterTo='transform opacity-100 scale-100'
+                        leave='transition ease-in duration-75'
+                        leaveFrom='transform opacity-100 scale-100'
+                        leaveTo='transform opacity-0 scale-95'
                       >
-                        {userNavigation.map((item) => (
-                          <Menu.Item key={item.name}>
-                            {({ active }) => (
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                )}
-                              >
-                                {item.name}
-                              </a>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </>
-                )}
-              </Menu>
+                        <Menu.Items
+                          static
+                          className='absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+                        >
+                          {userNavigation.map((item) => (
+                            <Menu.Item key={item.name}>
+                              {({ active }) => (
+                                <a
+                                  href={item.href}
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                >
+                                  {item.name}
+                                </a>
+                              )}
+                            </Menu.Item>
+                          ))}
+                        </Menu.Items>
+                      </Transition>
+                    </>
+                  )}
+                </Menu>
+              )}
             </div>
           </div>
         </div>
