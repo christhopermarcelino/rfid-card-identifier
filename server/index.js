@@ -10,6 +10,9 @@ const PORT = process.env.PORT || 3001;
 // Settings
 app.use(express.json());
 
+// Middlewares
+const { devAuthenticate } = require("./middlewares/AuthMiddleware");
+
 // Router
 const authRouter = require("./routers/AuthRouter");
 const cardRouter = require("./routers/CardRouter");
@@ -23,6 +26,6 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/card", cardRouter);
+app.use("/api/card", devAuthenticate, cardRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
