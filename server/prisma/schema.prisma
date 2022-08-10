@@ -11,9 +11,12 @@ datasource db {
 }
 
 model Admins {
-  id       String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  username String @unique
-  password String
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  username   String    @unique
+  password   String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
 
   @@map("admins")
 }
@@ -23,6 +26,9 @@ model Students {
   name         String      @db.VarChar(255)
   departmentId String      @db.Uuid
   department   Departments @relation(fields: [departmentId], references: [id])
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @default(now())
+  deleted_at   DateTime?
 
   Cards      Cards[]
   Activities Activities[]
@@ -31,29 +37,40 @@ model Students {
 }
 
 model Departments {
-  id       String     @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name     String     @db.VarChar(255)
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name       String    @db.VarChar(255)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
   Students Students[]
 
   @@map("departments")
 }
 
 model Cards {
-  id            String    @id @unique
-  activated_at  DateTime
-  last_activity DateTime
-  studentId     String?   @db.VarChar(30)
-  student       Students? @relation(fields: [studentId], references: [nim])
+  id           String    @id @unique
+  activated_at DateTime?
+  studentId    String?   @db.VarChar(30)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now())
+  deleted_at   DateTime?
+
+  student Students? @relation(fields: [studentId], references: [nim])
 
   @@map("cards")
 }
 
 model Activities {
-  id        String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  date_in   DateTime  @default(now())
-  date_out  DateTime?
-  studentId String
-  student   Students  @relation(fields: [studentId], references: [nim])
+  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  date_in    DateTime  @default(now())
+  date_out   DateTime?
+  studentId  String
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+  deleted_at DateTime?
+
+  student Students @relation(fields: [studentId], references: [nim])
 
   @@map("activities")
 }
