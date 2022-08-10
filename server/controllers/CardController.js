@@ -27,11 +27,11 @@ const getTemporaryCard = async (req, res) => {
     });
 
     delete card.id;
-  } catch (err) {
-    return sendError(res, err.message ?? undefined);
-  }
 
-  sendData(res, undefined, card);
+    sendData(res, card);
+  } catch (err) {
+    sendError(res, err.message ?? undefined);
+  }
 };
 
 const insertNewCard = async (req, res) => {

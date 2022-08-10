@@ -4,7 +4,7 @@ const sendOk = (res, message = "OK", code = 200) => {
   });
 };
 
-const sendData = (res, message = "OK", data = [], code = 200) => {
+const sendData = (res, data = [], message = "OK", code = 200) => {
   res.status(code).json({
     message,
     data,

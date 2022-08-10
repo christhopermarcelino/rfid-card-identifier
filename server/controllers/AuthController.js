@@ -22,7 +22,7 @@ const signin = async (req, res) => {
 
   const token = generateJWTToken({ id: user.id });
 
-  sendData(res, "Successfully login", { token });
+  sendData(res, { token }, "Successfully login");
 };
 
 module.exports = { signin };
