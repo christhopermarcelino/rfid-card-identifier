@@ -12,6 +12,7 @@ app.use(express.json());
 
 // Router
 const authRouter = require("./routers/AuthRouter");
+const cardRouter = require("./routers/CardRouter");
 
 // Route
 app.get("/api", (req, res) => {
@@ -22,5 +23,6 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/card", cardRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
