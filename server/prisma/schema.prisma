@@ -57,3 +57,10 @@ model Activities {
 
   @@map("activities")
 }
+
+model CardTemp {
+  id   Int    @id @default(autoincrement())
+  code String @db.VarChar(30)
+
+  @@map("cardtemp")
+}
