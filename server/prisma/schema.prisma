@@ -76,8 +76,8 @@ model Activities {
 }
 
 model CardTemp {
-  id   Int    @id @default(autoincrement())
-  code String @db.VarChar(30)
+  id   Int     @id @default(autoincrement())
+  code String? @db.VarChar(30)
 
   @@map("cardtemp")
 }
