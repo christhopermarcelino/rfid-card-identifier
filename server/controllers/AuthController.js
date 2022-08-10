@@ -9,20 +9,25 @@ const { generateJWTToken } = require("../services/TokenService");
 const signin = async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password)
-    return sendError(res, "Username and password cannot be empty", 400);
+  try {
+    if (!username || !password)
+      return sendError(res, "Username and password cannot be empty", 400);
 
-  const user = await prisma.admins.findFirst({
-    where: { username },
-  });
-  if (!user) return sendError(res, "User does not exists!", 404);
+    const user = await prisma.admins.findFirst({
+      where: { username },
+    });
+    if (!user) return sendError(res, "User does not exists!", 404);
 
-  const isPasswordValid = bcrypt.compareSync(password, user.password);
-  if (!isPasswordValid) return sendError(res, "Username or password invalid!");
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid)
+      return sendError(res, "Username or password invalid!");
 
-  const token = generateJWTToken({ id: user.id });
+    const token = generateJWTToken({ id: user.id });
 
-  sendData(res, { token }, "Successfully login");
+    sendData(res, { token }, "Successfully login");
+  } catch (err) {
+    sendError(res, err.message ?? undefined);
+  }
 };
 
 module.exports = { signin };
