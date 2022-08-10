@@ -43,8 +43,6 @@ const insertNewCard = async (req, res) => {
     await prisma.cards.create({
       data: {
         id: card.code,
-        activated_at: new Date().toISOString(),
-        last_activity: new Date().toISOString(),
       },
     });
   } catch (err) {
@@ -74,9 +72,11 @@ const pairCardWithUser = async (req, res) => {
     });
     if (!student) return sendError(res, "Student does not exists!");
 
+    const now = new Date().toISOString();
+
     await prisma.cards.update({
       where: { id: cardId },
-      data: { studentId: nim },
+      data: { studentId: nim, activated_at: now, updated_at: now },
     });
   } catch (err) {
     return sendError(res, err.message ?? undefined);
