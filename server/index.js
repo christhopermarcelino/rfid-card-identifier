@@ -4,11 +4,13 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
 const PORT = process.env.PORT || 3001;
 
 // Settings
 app.use(express.json());
+app.use(cors());
 
 // Middlewares
 const { devAuthenticate } = require("./middlewares/AuthMiddleware");
