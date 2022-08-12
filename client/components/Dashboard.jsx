@@ -134,6 +134,18 @@ export default function Dashboard({ title, children }) {
                   ))}
                 </nav>
               </div>
+              <div className='p-4 space-y-4'>
+                <img
+                  src='/images/profile1.jpg'
+                  alt='Profile 1'
+                  className='mx-auto rounded-md h-72'
+                />
+                <img
+                  src='/images/profile2.jpg'
+                  alt='Profile 2'
+                  className='mx-auto rounded-md h-72'
+                />
+              </div>
             </div>
           </Transition.Child>
           <div className='flex-shrink-0 w-14' aria-hidden='true'>
@@ -154,8 +166,8 @@ export default function Dashboard({ title, children }) {
                 alt='Workflow'
               />
             </div>
-            <div className='flex flex-col flex-1 overflow-y-auto'>
-              <nav className='flex-1 px-2 py-4 space-y-1 bg-gray-800'>
+            <div className='flex flex-col flex-1 overflow-y-auto bg-gray-800'>
+              <nav className='flex-1 px-2 py-4 space-y-1'>
                 {navigation.map((item) => (
                   <a
                     key={item.name}
@@ -180,6 +192,18 @@ export default function Dashboard({ title, children }) {
                   </a>
                 ))}
               </nav>
+              <div className='p-4 space-y-4'>
+                <img
+                  src='/images/profile1.jpg'
+                  alt='Profile 1'
+                  className='h-64 mx-auto rounded-md'
+                />
+                <img
+                  src='/images/profile2.jpg'
+                  alt='Profile 2'
+                  className='h-64 mx-auto rounded-md'
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -264,6 +288,12 @@ export default function Dashboard({ title, children }) {
             </div>
           </div>
         </main>
+        <footer className='px-8 py-2'>
+          <p className='text-lg text-gray-700 text-end'>
+            Copyright &copy; 2022. Rancang Bangun Sistem Kendali Portal Parkir
+            Menggunakan Middle Range RFID Reader Berbasis Internet Of Things
+          </p>
+        </footer>
       </div>
     </div>
   );
