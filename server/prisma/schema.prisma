@@ -28,8 +28,7 @@ model Students {
   updated_at DateTime  @default(now())
   deleted_at DateTime?
 
-  Cards      Cards[]
-  Activities Activities[]
+  Cards Cards[]
 
   @@map("students")
 }
@@ -42,7 +41,8 @@ model Cards {
   updated_at   DateTime  @default(now())
   deleted_at   DateTime?
 
-  student Students? @relation(fields: [nim], references: [nim])
+  student    Students?    @relation(fields: [nim], references: [nim])
+  Activities Activities[]
 
   @@map("cards")
 }
@@ -50,12 +50,12 @@ model Cards {
 model Activities {
   id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   time       DateTime  @default(now())
-  nim        String
+  code       String
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
   deleted_at DateTime?
 
-  student Students @relation(fields: [nim], references: [nim])
+  card Cards @relation(fields: [code], references: [id])
 
   @@map("activities")
 }
