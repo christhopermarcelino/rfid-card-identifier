@@ -22,30 +22,16 @@ model Admins {
 }
 
 model Students {
-  nim          String      @unique @db.VarChar(30)
-  name         String      @db.VarChar(255)
-  departmentId String      @db.Uuid
-  department   Departments @relation(fields: [departmentId], references: [id])
-  created_at   DateTime    @default(now())
-  updated_at   DateTime    @default(now())
-  deleted_at   DateTime?
-
-  Cards      Cards[]
-  Activities Activities[]
-
-  @@map("students")
-}
-
-model Departments {
-  id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  nim        String    @unique @db.VarChar(30)
   name       String    @db.VarChar(255)
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
   deleted_at DateTime?
 
-  Students Students[]
+  Cards      Cards[]
+  Activities Activities[]
 
-  @@map("departments")
+  @@map("students")
 }
 
 model Cards {
@@ -63,8 +49,7 @@ model Cards {
 
 model Activities {
   id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  date_in    DateTime  @default(now())
-  date_out   DateTime?
+  time       DateTime  @default(now())
   studentId  String
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
