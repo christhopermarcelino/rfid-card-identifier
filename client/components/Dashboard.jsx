@@ -102,9 +102,9 @@ export default function Dashboard({ title, children }) {
               </Transition.Child>
               <div className='flex items-center flex-shrink-0 px-4'>
                 <img
-                  className='w-auto h-8'
-                  src='https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg'
-                  alt='Workflow'
+                  className='w-auto mx-auto h-9'
+                  src='/images/logo.jpg'
+                  alt='Polines'
                 />
               </div>
               <div className='flex-1 h-0 mt-5 overflow-y-auto'>
@@ -161,9 +161,9 @@ export default function Dashboard({ title, children }) {
           <div className='flex flex-col flex-1 h-0'>
             <div className='flex items-center flex-shrink-0 h-16 px-4 bg-gray-900'>
               <img
-                className='w-auto h-8'
-                src='https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg'
-                alt='Workflow'
+                className='w-auto mx-auto h-9'
+                src='/images/logo.jpg'
+                alt='Polines'
               />
             </div>
             <div className='flex flex-col flex-1 overflow-y-auto bg-gray-800'>
