@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -11,12 +11,12 @@ export default function Signin() {
   const [password, setPassword] = useState("");
 
   const { user } = useAuthState();
-  const router = useRouter();
+  // const router = useRouter();
   const dispatch = useAuthDispatch();
 
-  useEffect(() => {
-    if (user || process.env.NODE_ENV == "development") router.replace("/");
-  }, []);
+  // useEffect(() => {
+  //   if (user || process.env.NODE_ENV == "development") router.replace("/");
+  // }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

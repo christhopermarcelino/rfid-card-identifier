@@ -1,6 +1,5 @@
 import Dashboard from "@/components/Dashboard";
 import { useAuthState } from "@/contexts/AuthContext";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -9,8 +8,9 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (process.env.APP_ENV === "production" && user === null)
+    if (process.env.NODE_ENV === "production" && user === null) {
       router.replace("/signin");
+    }
   }, []);
 
   return (

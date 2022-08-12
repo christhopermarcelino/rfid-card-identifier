@@ -1,20 +1,19 @@
 import "@/styles/globals.css";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 
-import Layout from "./_layout";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 const publicAccess = ["/", "/signin"];
 
 function MyApp({ Component, pageProps }) {
-  const router = useRouter();
+  // const router = useRouter();
 
-  if (
-    process.env.NODE_ENV === "production" &&
-    !publicAccess.includes(router.pathname)
-  ) {
-    router.push("/");
-  }
+  // if (
+  //   process.env.NODE_ENV === "production" &&
+  //   !publicAccess.includes(router.pathname)
+  // ) {
+  //   router.push("/");
+  // }
 
   return (
     <AuthProvider>
