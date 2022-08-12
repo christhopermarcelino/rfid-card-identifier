@@ -36,7 +36,7 @@ const columns = [
 export default function Home() {
   const { user } = useAuthState();
   const router = useRouter();
-  const [tableData, setTableData] = useState([]);
+  const [data, setData] = useState(() => []);
 
   axios.defaults.baseURL = "https://rfid-card-identifier.herokuapp.com/api";
 
@@ -47,11 +47,11 @@ export default function Home() {
 
     axios
       .get("/activities", {}, { headers: { ...bearerToken() } })
-      .then((res) => setTableData(res.data.data))
+      .then((res) => {
+        setData(res.data.data);
+      })
       .catch((err) => alert(err));
   }, []);
-
-  const [data, setData] = useState(() => [...tableData]);
 
   const table = useReactTable({
     data,
