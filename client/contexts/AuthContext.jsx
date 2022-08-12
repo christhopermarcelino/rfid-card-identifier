@@ -10,12 +10,12 @@ DispatchContext.displayName = "AuthDispatch";
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
-    case "LOGIN":
+    case "SIGNIN":
       return {
         ...state,
         user: payload,
       };
-    case "LOGOUT":
+    case "SIGNOUT":
       localStorage.removeItem("token");
       return {
         ...state,

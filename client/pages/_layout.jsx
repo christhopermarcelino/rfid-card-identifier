@@ -11,7 +11,7 @@ export default function Layout({ Component, pageProps }) {
 
   if (user && router.pathname === "/signin") return <Home />;
 
-  if (process.env.NODE_ENV === "production" && user === null) return <Signin />;
+  if (process.env.APP_ENV === "production" && user === null) return <Signin />;
 
   return <Component {...pageProps} />;
 }

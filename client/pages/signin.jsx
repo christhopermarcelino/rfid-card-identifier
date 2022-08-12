@@ -1,11 +1,61 @@
-// import { LockClosedIcon } from '@heroicons/react/solid';
-
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import axios from "axios";
+
+import { useAuthDispatch } from "@/contexts/AuthContext";
+import { bearerToken } from "@/libs/helpers";
+import Router from "next/router";
 
 export default function Signin() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const router = useRouter();
+  const dispatch = useAuthDispatch();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!username || !password) {
+      alert("Username and password can not be empty");
+      return;
+    }
+
+    const data = {
+      username,
+      password,
+    };
+
+    axios
+      .post("http://localhost:3001/api/auth/signin", data)
+      .then((res) => {
+        const token = res.data.data.token;
+        localStorage.setItem("token", token);
+
+        return axios.post(
+          "http://localhost:3001/api/auth/get-user-info",
+          {},
+          { headers: { ...bearerToken() } }
+        );
+      })
+      .then((user) => {
+        dispatch("SIGNIN", { ...user.data.data });
+        router.replace("/");
+      })
+      .catch((err) => {
+        alert(err ?? "Error occured!");
+      });
+  };
+
   return (
     <>
-      <Head></Head>
+      <Head>
+        <title>Sign in | Sistem Portal Parkir Otomatis</title>
+        <meta name='description' content='Sistem Portal Parkir Otomatis' />
+        <link rel='icon' href='/favicon.png' />
+      </Head>
+
       <main className='flex items-center justify-center px-4 py-12 min-h-main sm:px-6 lg:px-8'>
         <div className='w-full max-w-lg space-y-8'>
           <div>
@@ -28,9 +78,14 @@ export default function Signin() {
               </a>
             </p> */}
           </div>
-          <form className='mt-8 space-y-6' action='#' method='POST'>
+          <form
+            className='mt-8 space-y-6'
+            action='#'
+            method='POST'
+            onSubmit={(e) => handleSubmit(e)}
+          >
             <input type='hidden' name='remember' defaultValue='true' />
-            <div className='-space-y-px rounded-md shadow-sm'>
+            <div className='space-y-1 rounded-md shadow-sm'>
               <div>
                 <label htmlFor='username' className='sr-only'>
                   Username
@@ -41,7 +96,8 @@ export default function Signin() {
                   type='text'
                   autoComplete='username'
                   required
-                  className='relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+                  onChange={(tag) => setUsername(tag.target.value)}
+                  className='relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                   placeholder='Username'
                 />
               </div>
@@ -54,14 +110,15 @@ export default function Signin() {
                   name='password'
                   type='password'
                   autoComplete='current-password'
+                  onChange={(tag) => setPassword(tag.target.value)}
                   required
-                  className='relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
+                  className='relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                   placeholder='Password'
                 />
               </div>
             </div>
 
-            <div className='flex items-center justify-between'>
+            {/* <div className='flex items-center justify-between'>
               <div className='flex items-center'>
                 <input
                   id='remember-me'
@@ -85,7 +142,7 @@ export default function Signin() {
                   Forgot your password?
                 </a>
               </div>
-            </div>
+            </div> */}
 
             <div>
               <button

@@ -24,10 +24,14 @@ const signin = async (req, res) => {
 
     const token = generateJWTToken({ id: user.id });
 
-    sendData(res, { token }, "Successfully login");
+    sendData(res, { username: user.username, token }, "Successfully login");
   } catch (err) {
     sendError(res, err.message ?? undefined);
   }
 };
 
-module.exports = { signin };
+const getUserInfo = (req, res) => {
+  sendData(res, { username: req.user.username });
+};
+
+module.exports = { signin, getUserInfo };
