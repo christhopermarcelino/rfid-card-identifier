@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
@@ -219,7 +220,9 @@ export default function Dashboard({ title, children }) {
           </button>
           <div className='flex justify-between flex-1 px-4'>
             <div className='flex items-center flex-1'>
-              <h1 className='text-2xl font-semibold text-gray-900'>{title}</h1>
+              <h1 className='text-2xl font-semibold text-gray-900'>
+                Sistem Portal Parkir Otomatis
+              </h1>
             </div>
             <div className='flex items-center ml-4 md:ml-6'>
               <button className='p-1 text-gray-400 bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
@@ -284,6 +287,15 @@ export default function Dashboard({ title, children }) {
         <main className='relative flex-1 overflow-y-auto focus:outline-none'>
           <div className='py-6'>
             <div className='px-4 mx-auto max-w-7xl sm:px-6 md:px-8'>
+              <Head>
+                <title>{title} | Sistem Portal Parkir Otomatis</title>
+                <meta
+                  name='description'
+                  content='Sistem Portal Parkir Otomatis'
+                />
+                <link rel='icon' href='/favicon.png' />
+              </Head>
+
               {children}
             </div>
           </div>
