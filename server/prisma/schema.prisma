@@ -37,12 +37,12 @@ model Students {
 model Cards {
   id           String    @id @unique
   activated_at DateTime?
-  studentId    String?   @db.VarChar(30)
+  nim          String?   @db.VarChar(30)
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now())
   deleted_at   DateTime?
 
-  student Students? @relation(fields: [studentId], references: [nim])
+  student Students? @relation(fields: [nim], references: [nim])
 
   @@map("cards")
 }
@@ -50,12 +50,12 @@ model Cards {
 model Activities {
   id         String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   time       DateTime  @default(now())
-  studentId  String
+  nim        String
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now())
   deleted_at DateTime?
 
-  student Students @relation(fields: [studentId], references: [nim])
+  student Students @relation(fields: [nim], references: [nim])
 
   @@map("activities")
 }
