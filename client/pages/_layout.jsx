@@ -9,9 +9,10 @@ export default function Layout({ Component, pageProps }) {
   const { user } = useAuthState();
   const router = useRouter();
 
-  if (user && router.pathname === "/signin") return <Home />;
+  if (user && router.pathname === "/signin") return <Home {...pageProps} />;
 
-  if (process.env.APP_ENV === "production" && user === null) return <Signin />;
+  if (process.env.APP_ENV === "production" && user === null)
+    return <Signin {...pageProps} />;
 
   return <Component {...pageProps} />;
 }

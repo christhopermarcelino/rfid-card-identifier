@@ -18,9 +18,15 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <AuthProvider>
-      <Layout Component={Component} pageProps={pageProps} />
+      <Component {...pageProps} />
     </AuthProvider>
   );
+
+  // return (
+  //   <AuthProvider>
+  //     <Layout Component={Component} pageProps={pageProps} />
+  //   </AuthProvider>
+  // );
 }
 
 export default MyApp;

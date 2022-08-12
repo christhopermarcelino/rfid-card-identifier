@@ -1,18 +1,22 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { useAuthDispatch } from "@/contexts/AuthContext";
+import { useAuthDispatch, useAuthState } from "@/contexts/AuthContext";
 import { bearerToken } from "@/libs/helpers";
-import Router from "next/router";
 
 export default function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const { user } = useAuthState();
   const router = useRouter();
   const dispatch = useAuthDispatch();
+
+  useEffect(() => {
+    if (user || process.env.NODE_ENV == "development") router.replace("/");
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
