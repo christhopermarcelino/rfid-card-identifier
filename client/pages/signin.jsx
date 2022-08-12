@@ -14,6 +14,8 @@ export default function Signin() {
   const router = useRouter();
   const dispatch = useAuthDispatch();
 
+  axios.defaults.baseURL = "https://rfid-card-identifier.herokuapp.com/api";
+
   useEffect(() => {
     if (user || process.env.NODE_ENV == "development") router.replace("/");
   }, []);
@@ -32,13 +34,13 @@ export default function Signin() {
     };
 
     axios
-      .post("http://localhost:3001/api/auth/signin", data)
+      .post("/auth/signin", data)
       .then((res) => {
         const token = res.data.data.token;
         localStorage.setItem("token", token);
 
         return axios.post(
-          "http://localhost:3001/api/auth/get-user-info",
+          "/auth/get-user-info",
           {},
           { headers: { ...bearerToken() } }
         );
