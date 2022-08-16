@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const { sendData } = require("../libs/APIResponse");
+const { sendData, sendError } = require("../libs/APIResponse");
 
 const getAllAvailableStudents = async (req, res) => {
   try {
