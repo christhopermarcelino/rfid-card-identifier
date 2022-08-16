@@ -22,6 +22,7 @@ const {
 const authRouter = require("./routers/AuthRouter");
 const cardRouter = require("./routers/CardRouter");
 const activityRouter = require("./routers/ActivityRouter");
+const studentRouter = require("./routers/StudentRouter");
 
 // Route
 app.get("/api", (req, res) => {
@@ -32,6 +33,7 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/student", authenticate, studentRouter);
 app.use("/api/card", devAuthenticate, cardRouter);
 app.use("/api/activities", authenticate, activityRouter);
 

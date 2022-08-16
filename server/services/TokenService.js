@@ -8,11 +8,10 @@ const generateJWTToken = (data) => {
 };
 
 const getAndValidateBearerToken = (res, bearerToken) => {
-  if (!bearerToken || !bearerToken.startsWith("Bearer "))
-    return sendError(res, "Bearer token format invalid!");
+  if (!bearerToken || !bearerToken.startsWith("Bearer ")) return null;
 
   const token = bearerToken.split(" ")[1];
-  if (!token) return sendError(res, "Bearer token format invalid!");
+  if (!token) return null;
 
   return token;
 };

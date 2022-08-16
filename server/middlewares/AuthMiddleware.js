@@ -15,6 +15,7 @@ const authenticate = async (req, res, next) => {
   }
 
   const token = getAndValidateBearerToken(res, bearerToken);
+  if (!token) return sendError(res, "Bearer token format invalid!");
 
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY);
