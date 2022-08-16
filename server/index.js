@@ -33,7 +33,7 @@ app.get("/api", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-app.use("/api/student", authenticate, studentRouter);
+app.use("/api/student", studentRouter);
 app.use("/api/card", devAuthenticate, cardRouter);
 app.use("/api/activities", authenticate, activityRouter);
 
