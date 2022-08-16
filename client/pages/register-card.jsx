@@ -43,7 +43,7 @@ export default function RegisterCard() {
           ) : data ? (
             <>
               <p className='text-6xl font-bold tracking-wide'>
-                {data.data.code}
+                {data?.data?.code}
               </p>
             </>
           ) : (
@@ -67,7 +67,9 @@ export default function RegisterCard() {
             >
               <option value=''>{"Pilih Mahasiswa (NIM - Nama)"}</option>
               {students.map((student) => (
-                <option>{`${student.nim} - ${student.name}`}</option>
+                <option
+                  key={student.nim}
+                >{`${student.nim} - ${student.name}`}</option>
               ))}
             </select>
           </div>
