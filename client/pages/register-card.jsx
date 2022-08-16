@@ -5,7 +5,7 @@ import Dashboard from "@/components/Dashboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function RegisterCard({ devtoken }) {
+export default function RegisterCard() {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
@@ -15,8 +15,9 @@ export default function RegisterCard({ devtoken }) {
       .catch((err) => alert(err.message));
   }, []);
 
-  const fetcher = (url) =>
-    fetch(url, { headers: { devtoken } }).then((res) => res.json());
+  //   const fetcher = (url) =>
+  //     fetch(url, { headers: { devtoken } }).then((res) => res.json());
+  const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data, error } = useSWR(
     "http://localhost:3001/api/card/temp",
@@ -74,12 +75,4 @@ export default function RegisterCard({ devtoken }) {
       </Dashboard>
     </>
   );
-}
-
-export function getStaticProps() {
-  return {
-    props: {
-      devtoken: process.env.DEV_TOKEN,
-    },
-  };
 }
