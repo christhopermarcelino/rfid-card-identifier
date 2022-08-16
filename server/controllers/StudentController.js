@@ -31,4 +31,35 @@ const getAllAvailableStudents = async (req, res) => {
   }
 };
 
-module.exports = { getAllAvailableStudents };
+const getAllStudentsAndCards = async (req, res) => {
+  try {
+    const students = await prisma.students.findMany({
+      select: {
+        nim: true,
+        name: true,
+      },
+    });
+
+    const cards = await prisma.cards.findMany({
+      select: {
+        id: true,
+        nim: true,
+      },
+    });
+
+    const cardsObj = {};
+    cards.forEach((card) => {
+      cardsObj[card.nim] = card.id;
+    });
+
+    students.forEach((st) => {
+      st["code"] = cardsObj[st.nim];
+    });
+
+    sendData(res, students);
+  } catch (err) {
+    sendError(res, err.message ?? undefined);
+  }
+};
+
+module.exports = { getAllAvailableStudents, getAllStudentsAndCards };
