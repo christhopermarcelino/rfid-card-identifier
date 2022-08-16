@@ -38,6 +38,11 @@ const getAllStudentsAndCards = async (req, res) => {
         nim: true,
         name: true,
       },
+      orderBy: [
+        {
+          nim: "asc",
+        },
+      ],
     });
 
     const cards = await prisma.cards.findMany({
