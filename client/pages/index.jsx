@@ -49,6 +49,7 @@ export default function Home() {
       .get("/activities", {}, { headers: { ...bearerToken() } })
       .then((res) => {
         setData(res.data.data);
+        console.log(res.data.data);
       })
       .catch((err) => alert(err));
   }, []);
@@ -109,7 +110,7 @@ export default function Home() {
                               key='no'
                               className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'
                             >
-                              {idx}
+                              {idx + 1}
                             </td>
                             {row.getVisibleCells().map((cell) => (
                               <td

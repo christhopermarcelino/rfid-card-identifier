@@ -13,11 +13,16 @@ const getAllActivities = async (req, res) => {
           },
         },
       },
+      orderBy: [
+        {
+          time: "desc",
+        },
+      ],
     });
 
     const datas = allActivities.map((item) => {
       return {
-        time: item.time,
+        time: item.time.toLocaleString(),
         name: item.card.student.name,
         nim: item.card.nim,
         code: item.card.id,
