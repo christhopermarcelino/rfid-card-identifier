@@ -35,6 +35,6 @@ app.get("/api", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/student", studentRouter);
 app.use("/api/card", cardRouter);
-app.use("/api/activities", authenticate, activityRouter);
+app.use("/api/activities", activityRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
