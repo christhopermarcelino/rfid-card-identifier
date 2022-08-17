@@ -11,9 +11,9 @@ const getAllAvailableStudents = async (req, res) => {
       },
     });
 
-    const notAvailableStudentsNim = notAvailableStudents.map(
-      (item) => item.nim
-    );
+    const filterNull = notAvailableStudents.filter((item) => item.nim != null);
+
+    const notAvailableStudentsNim = filterNull.map((item) => item.nim);
 
     const allAvailableStudents = await prisma.students.findMany({
       where: {
