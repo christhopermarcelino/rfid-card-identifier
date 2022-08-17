@@ -35,4 +35,30 @@ const getAllActivities = async (req, res) => {
   }
 };
 
-module.exports = { getAllActivities };
+const addNewAcivity = async (req, res) => {
+  const { code } = req.query;
+
+  if (!code) return sendError(res, "Card id can not be empty!", 400);
+
+  try {
+    const card = await prisma.cards.findFirst({
+      where: {
+        id: code,
+      },
+    });
+
+    if (!card || !card?.nim) return res.send("OFF");
+
+    await prisma.activities.create({
+      data: {
+        code,
+      },
+    });
+
+    return res.send("OK");
+  } catch (err) {
+    return res.send("OFF");
+  }
+};
+
+module.exports = { getAllActivities, addNewAcivity };
