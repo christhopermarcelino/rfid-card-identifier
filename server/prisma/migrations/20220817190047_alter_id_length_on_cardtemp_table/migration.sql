@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "cardtemp" ALTER COLUMN "code" SET DATA TYPE VARCHAR(40);
