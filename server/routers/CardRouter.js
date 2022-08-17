@@ -8,8 +8,8 @@ const {
   pairCardWithUser,
 } = require("../controllers/CardController");
 
-router.patch("/temp", updateTemporaryCard);
-router.get("/temp", getTemporaryCard);
+router.get("/update-temp", updateTemporaryCard);
+router.get("/get-temp", getTemporaryCard);
 router.post("/insert", insertNewCard);
 router.post("/pair", pairCardWithUser);
 

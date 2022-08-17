@@ -4,15 +4,19 @@ const prisma = new PrismaClient();
 const { sendError, sendOk, sendData } = require("../libs/APIResponse");
 
 const updateTemporaryCard = async (req, res) => {
-  const { code } = req.body;
+  const { code } = req.query;
+
+  console.log(`Code = ${code}`);
 
   if (!code) return sendError(res, "Card code can not be empty!", 400);
 
   try {
-    await prisma.cardTemp.update({
+    const updated = await prisma.cardTemp.update({
       where: { id: 1 },
       data: { code },
     });
+
+    console.log(`Updated -> `, updated);
   } catch (err) {
     return sendError(res, err.message ?? undefined);
   }
@@ -35,21 +39,18 @@ const getTemporaryCard = async (req, res) => {
 };
 
 const insertNewCard = async (req, res) => {
-  const card = await prisma.cardTemp.findFirst({ where: { id: 1 } });
-
-  if (!card.code) return sendError(res, "No card to insert!");
-
-  try {
-    await prisma.cards.create({
-      data: {
-        id: card.code,
-      },
-    });
-  } catch (err) {
-    return sendError(res, err.message ?? undefined);
-  }
-
-  sendOk(res);
+  // const card = await prisma.cardTemp.findFirst({ where: { id: 1 } });
+  // if (!card.code) return sendError(res, "No card to insert!");
+  // try {
+  //   await prisma.cards.create({
+  //     data: {
+  //       id: card.code,
+  //     },
+  //   });
+  // } catch (err) {
+  //   return sendError(res, err.message ?? undefined);
+  // }
+  // sendOk(res);
 };
 
 const pairCardWithUser = async (req, res) => {
@@ -59,12 +60,10 @@ const pairCardWithUser = async (req, res) => {
     return sendError(res, "Card id and NIM can not be empty!", 400);
 
   try {
-    const card = await prisma.cards.findFirst({
+    const existedCard = await prisma.cards.findFirst({
       where: { id: cardId },
     });
-    if (!card) return sendError(res, "Card does not exists!");
-
-    if (card.studentId)
+    if (existedCard?.nim)
       return sendError(res, "Card has already been paired!", 409);
 
     const student = await prisma.students.findFirst({
@@ -72,11 +71,20 @@ const pairCardWithUser = async (req, res) => {
     });
     if (!student) return sendError(res, "Student does not exists!");
 
-    const now = new Date().toISOString();
+    if (!existedCard) {
+      await prisma.cards.create({
+        data: {
+          id: cardId,
+          activated_at: new Date(),
+        },
+      });
+    }
+
+    const now = new Date();
 
     await prisma.cards.update({
       where: { id: cardId },
-      data: { studentId: nim, activated_at: now, updated_at: now },
+      data: { nim, activated_at: now, updated_at: now },
     });
   } catch (err) {
     return sendError(res, err.message ?? undefined);
