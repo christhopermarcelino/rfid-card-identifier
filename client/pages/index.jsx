@@ -1,3 +1,4 @@
+import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -36,7 +37,7 @@ const columns = [
 export default function Home() {
   const { user } = useAuthState();
   const router = useRouter();
-  const [data, setData] = useState(() => []);
+  const [tableData, setTableData] = useState([]);
 
   axios.defaults.baseURL = "https://rfid-card-identifier.herokuapp.com/api";
 
@@ -44,18 +45,24 @@ export default function Home() {
     if (process.env.NODE_ENV === "production" && user === null) {
       router.replace("/signin");
     }
-
-    axios
-      .get("/activities", {}, { headers: { ...bearerToken() } })
-      .then((res) => {
-        setData(res.data.data);
-        console.log(res.data.data);
-      })
-      .catch((err) => alert(err));
   }, []);
 
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+
+  const { data, error } = useSWR(
+    "http://localhost:3001/api/activities",
+    fetcher,
+    {
+      refreshInterval: 3000,
+    }
+  );
+
+  useEffect(() => {
+    setTableData(data?.data ?? []);
+  }, [data]);
+
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
