@@ -7,6 +7,16 @@ import axios from "axios";
 
 export default function RegisterCard() {
   const [students, setStudents] = useState([]);
+  const [cardData, setCardData] = useState("");
+  const [studentData, setStudentData] = useState(null);
+
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+
+  const { data, error } = useSWR(
+    "http://localhost:3001/api/card/get-temp",
+    fetcher,
+    { refreshInterval: 1000 }
+  );
 
   useEffect(() => {
     axios
@@ -15,15 +25,28 @@ export default function RegisterCard() {
       .catch((err) => alert(err.message));
   }, []);
 
-  //   const fetcher = (url) =>
-  //     fetch(url, { headers: { devtoken } }).then((res) => res.json());
-  const fetcher = (url) => fetch(url).then((res) => res.json());
+  useEffect(() => {
+    setCardData(data?.data?.code);
+  }, [data]);
 
-  const { data, error } = useSWR(
-    "http://localhost:3001/api/card/temp",
-    fetcher,
-    { refreshInterval: 1000 }
-  );
+  const handlePairing = () => {
+    if (!cardData || !studentData) {
+      alert("Data can not be empty!");
+      return;
+    }
+
+    const nim = studentData.split(" - ")[0];
+
+    const data = {
+      nim,
+      cardId: cardData,
+    };
+
+    axios
+      .post("http://localhost:3001/api/card/pair", data)
+      .then((res) => alert(res?.data?.message))
+      .catch((err) => alert(err?.response?.data?.message ?? "Error occurred."));
+  };
 
   return (
     <>
@@ -42,9 +65,7 @@ export default function RegisterCard() {
             </>
           ) : data ? (
             <>
-              <p className='text-6xl font-bold tracking-wide'>
-                {data?.data?.code}
-              </p>
+              <p className='text-6xl font-bold tracking-wide'>{cardData}</p>
             </>
           ) : (
             <div className='flex items-center justify-center h-24 bg-gray-200 rounded-md animate-pulse'>
@@ -64,6 +85,7 @@ export default function RegisterCard() {
               name='pairing'
               className='block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
               defaultValue=''
+              onChange={(e) => setStudentData(e.target.value)}
             >
               <option value=''>{"Pilih Mahasiswa (NIM - Nama)"}</option>
               {students.map((student) => (
@@ -73,6 +95,14 @@ export default function RegisterCard() {
               ))}
             </select>
           </div>
+
+          <button
+            type='button'
+            onClick={handlePairing}
+            className='inline-flex items-center px-4 py-2 mt-5 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-primary hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700'
+          >
+            Pasangkan
+          </button>
         </main>
       </Dashboard>
     </>
