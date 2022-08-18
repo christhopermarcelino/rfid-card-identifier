@@ -8,6 +8,8 @@ const cors = require("cors");
 
 const PORT = process.env.PORT || 3001;
 
+global.findCard = null;
+
 // Settings
 app.use(express.json());
 app.use(cors());

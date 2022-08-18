@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-const { sendError, sendData } = require("../libs/APIResponse");
+const { sendError, sendData, sendOk } = require("../libs/APIResponse");
 
 const getAllActivities = async (req, res) => {
   try {
@@ -35,10 +35,10 @@ const getAllActivities = async (req, res) => {
   }
 };
 
-const addNewAcivity = async (req, res) => {
+const updateDataCache = async (req, res) => {
   const { code } = req.query;
 
-  if (!code) return sendError(res, "Card id can not be empty!", 400);
+  if (!code) return res.send("OFF");
 
   try {
     const card = await prisma.cards.findFirst({
@@ -46,20 +46,35 @@ const addNewAcivity = async (req, res) => {
         id: code,
       },
     });
+    global.findData = card;
 
-    if (!card) return res.status(409).send("OFF");
-    if (!card?.nim) return res.status(409).send("OFF");
+    res.send("OK");
+  } catch (err) {
+    res.send("OFF");
+  }
+};
 
-    const created = await prisma.activities.create({
+const addNewAcivity = async (req, res) => {
+  const { code } = req.query;
+
+  if (!code) return res.send("OFF");
+
+  try {
+    const card = global.findData;
+
+    if (!card) return res.send("OFF");
+    if (!card?.nim) return res.send("OFF");
+
+    res.send("OK");
+
+    await prisma.activities.create({
       data: {
         code,
       },
     });
-
-    return res.status(201).send("OK");
   } catch (err) {
-    return res.status(500).send("OFF");
+    return res.send("OFF");
   }
 };
 
-module.exports = { getAllActivities, addNewAcivity };
+module.exports = { getAllActivities, updateDataCache, addNewAcivity };
