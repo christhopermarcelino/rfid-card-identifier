@@ -1,5 +1,6 @@
-import Head from "next/head";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
 import axios from "axios";
 import {
   createColumnHelper,
@@ -17,21 +18,39 @@ const removeConnectionContent = "Anda akan menghapus data ini.";
 const columnHelper = createColumnHelper();
 
 export default function RegisterCard() {
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [code, setCode] = useState(null);
 
-  const handleRemoveCardConnection = () => {};
+  const handleRemoveCardConnection = (e) => {
+    if (!code) {
+      alert("Code can not be empty!");
+      return;
+    }
 
-  const showConfirmationModal = () => {
+    axios
+      .delete(`http://localhost:3001/api/card/remove?code=${code}`)
+      .then((res) => {
+        alert("Success");
+        router.reload();
+      })
+      .catch((err) => alert(err.message ?? "Error occurred."))
+      .finally(() => setOpen(false));
+  };
+
+  const showConfirmationModal = (e) => {
+    setCode(e.target.getAttribute("data-code"));
     setOpen(true);
   };
 
-  const renderRemoveConnectionButton = () => {
+  const renderRemoveConnectionButton = (value) => {
     return (
       <button
         type='button'
-        onClick={showConfirmationModal}
-        className='inline-flex items-center px-4 py-2 mt-5 text-sm font-medium border-2 rounded-md shadow-sm text-primary border-primary hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700'
+        onClick={(e) => showConfirmationModal(e)}
+        data-code={value}
+        className='inline-flex items-center px-4 py-2 text-sm font-medium border-2 rounded-md shadow-sm text-primary border-primary hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700'
       >
         Hapus
       </button>
@@ -43,16 +62,16 @@ export default function RegisterCard() {
       cell: (info) => info.getValue(),
       header: "NIM",
     }),
-    columnHelper.accessor("name", {
+    columnHelper.accessor("student.name", {
       cell: (info) => info.getValue(),
       header: "Nama",
     }),
-    columnHelper.accessor("code", {
+    columnHelper.accessor("name", {
       cell: (info) => info.getValue() ?? "-",
       header: "Kode Kartu",
     }),
-    columnHelper.accessor("action", {
-      cell: (info) => (info.getValue() ? renderRemoveConnectionButton() : null),
+    columnHelper.accessor("id", {
+      cell: (info) => renderRemoveConnectionButton(info.getValue()),
       header: "Aksi",
     }),
   ];
