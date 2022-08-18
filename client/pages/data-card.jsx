@@ -9,26 +9,53 @@ import {
 } from "@tanstack/react-table";
 
 import Dashboard from "@/components/Dashboard";
+import SimpleAlertModal from "@/components/Modal";
+
+const removeConnectionTitle = "Apakah anda yakin?";
+const removeConnectionContent = "Anda akan menghapus data ini.";
 
 const columnHelper = createColumnHelper();
 
-const columns = [
-  columnHelper.accessor("nim", {
-    cell: (info) => info.getValue(),
-    header: "NIM",
-  }),
-  columnHelper.accessor("name", {
-    cell: (info) => info.getValue(),
-    header: "Nama",
-  }),
-  columnHelper.accessor("code", {
-    cell: (info) => info.getValue() ?? "-",
-    header: "Kode Kartu",
-  }),
-];
-
 export default function RegisterCard() {
   const [data, setData] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const handleRemoveCardConnection = () => {};
+
+  const showConfirmationModal = () => {
+    setOpen(true);
+  };
+
+  const renderRemoveConnectionButton = () => {
+    return (
+      <button
+        type='button'
+        onClick={showConfirmationModal}
+        className='inline-flex items-center px-4 py-2 mt-5 text-sm font-medium border-2 rounded-md shadow-sm text-primary border-primary hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700'
+      >
+        Hapus
+      </button>
+    );
+  };
+
+  const columns = [
+    columnHelper.accessor("nim", {
+      cell: (info) => info.getValue(),
+      header: "NIM",
+    }),
+    columnHelper.accessor("name", {
+      cell: (info) => info.getValue(),
+      header: "Nama",
+    }),
+    columnHelper.accessor("code", {
+      cell: (info) => info.getValue() ?? "-",
+      header: "Kode Kartu",
+    }),
+    columnHelper.accessor("action", {
+      cell: (info) => (info.getValue() ? renderRemoveConnectionButton() : null),
+      header: "Aksi",
+    }),
+  ];
 
   useEffect(() => {
     axios
@@ -112,6 +139,13 @@ export default function RegisterCard() {
                       ))}
                     </tbody>
                   </table>
+                  <SimpleAlertModal
+                    open={open}
+                    setOpen={setOpen}
+                    title={removeConnectionTitle}
+                    content={removeConnectionContent}
+                    action={handleRemoveCardConnection}
+                  />
                 </div>
               </div>
             </div>
