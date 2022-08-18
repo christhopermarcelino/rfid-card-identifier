@@ -24,29 +24,47 @@ const getTemporaryCard = async (req, res) => {
   try {
     const card = await prisma.cardTemp.findFirst({
       where: { id: 1 },
+      select: {
+        code: true,
+      },
     });
 
-    delete card.id;
+    const existedCard = await prisma.cards.findFirst({
+      where: {
+        id: card.code,
+      },
+    });
 
-    sendData(res, card);
+    const data = {
+      code: card.code,
+      isRegistered: existedCard?.nim ? true : false,
+      name: existedCard?.name,
+    };
+
+    sendData(res, data);
   } catch (err) {
     sendError(res, err.message ?? undefined);
   }
 };
 
-const insertNewCard = async (req, res) => {
-  // const card = await prisma.cardTemp.findFirst({ where: { id: 1 } });
-  // if (!card.code) return sendError(res, "No card to insert!");
-  // try {
-  //   await prisma.cards.create({
-  //     data: {
-  //       id: card.code,
-  //     },
-  //   });
-  // } catch (err) {
-  //   return sendError(res, err.message ?? undefined);
-  // }
-  // sendOk(res);
+const removeCardConnection = async (req, res) => {
+  const { code } = req.query;
+
+  try {
+    await prisma.cards.update({
+      where: {
+        id: code,
+      },
+      data: {
+        nim: null,
+        name: null,
+      },
+    });
+
+    sendOk(res);
+  } catch (err) {
+    sendError(res, err.message ?? undefined);
+  }
 };
 
 const pairCardWithUser = async (req, res) => {
@@ -67,31 +85,36 @@ const pairCardWithUser = async (req, res) => {
     });
     if (!student) return sendError(res, "Student does not exists!");
 
+    const splittedNim = nim.split(".");
+    const name = splittedNim[2] + splittedNim[3] + splittedNim[4];
+
     if (!existedCard) {
       await prisma.cards.create({
         data: {
           id: cardId,
+          nim,
+          name,
           activated_at: new Date(),
         },
       });
+    } else {
+      const now = new Date();
+
+      await prisma.cards.update({
+        where: { id: cardId },
+        data: { nim, name, activated_at: now, updated_at: now },
+      });
     }
 
-    const now = new Date();
-
-    await prisma.cards.update({
-      where: { id: cardId },
-      data: { nim, activated_at: now, updated_at: now },
-    });
+    sendOk(res);
   } catch (err) {
     return sendError(res, err.message ?? undefined);
   }
-
-  sendOk(res);
 };
 
 module.exports = {
   updateTemporaryCard,
   getTemporaryCard,
-  insertNewCard,
+  removeCardConnection,
   pairCardWithUser,
 };
