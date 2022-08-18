@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import {
@@ -11,6 +12,7 @@ import {
 } from "@heroicons/react/outline";
 
 import { classNames } from "@/libs/helpers";
+import { useAuthDispatch } from "@/contexts/AuthContext";
 
 const navigation =
   process.env.NODE_ENV === "production"
@@ -42,14 +44,22 @@ const navigation =
           current: false,
         },
       ];
-const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
-];
 
 export default function Dashboard({ title, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const dispatch = useAuthDispatch();
+  const router = useRouter();
+
+  const handleSignOut = () => {
+    dispatch("SIGNOUT", {});
+    router.replace("/signin");
+  };
+
+  const userNavigation = [
+    { name: "Your Profile", href: "#", action: () => {} },
+    { name: "Settings", href: "#", action: () => {} },
+    { name: "Sign out", href: "#", action: handleSignOut },
+  ];
 
   return (
     <div className='flex h-screen overflow-hidden bg-gray-100'>
@@ -231,7 +241,8 @@ export default function Dashboard({ title, children }) {
               </button>
 
               {/* Profile dropdown */}
-              {process.env.NODE_ENV === "production" && (
+              {/* {process.env.NODE_ENV === "production" && ( */}
+              {
                 <Menu as='div' className='relative ml-3'>
                   {({ open }) => (
                     <>
@@ -240,7 +251,7 @@ export default function Dashboard({ title, children }) {
                           <span className='sr-only'>Open user menu</span>
                           <img
                             className='w-8 h-8 rounded-full'
-                            src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                            src='/images/user.png'
                             alt=''
                           />
                         </Menu.Button>
@@ -262,15 +273,16 @@ export default function Dashboard({ title, children }) {
                           {userNavigation.map((item) => (
                             <Menu.Item key={item.name}>
                               {({ active }) => (
-                                <a
+                                <button
                                   href={item.href}
+                                  onClick={item.action}
                                   className={classNames(
                                     active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
+                                    "block px-4 py-2 w-full text-start text-sm text-gray-700"
                                   )}
                                 >
                                   {item.name}
-                                </a>
+                                </button>
                               )}
                             </Menu.Item>
                           ))}
@@ -279,7 +291,7 @@ export default function Dashboard({ title, children }) {
                     </>
                   )}
                 </Menu>
-              )}
+              }
             </div>
           </div>
         </div>
