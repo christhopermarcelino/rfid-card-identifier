@@ -21,7 +21,6 @@ const navigation =
           name: "Data Statistik",
           href: "/",
           icon: PresentationChartLineIcon,
-          current: true,
         },
       ]
     : [
@@ -29,19 +28,16 @@ const navigation =
           name: "Data Statistik",
           href: "/",
           icon: PresentationChartLineIcon,
-          current: true,
         },
         {
           name: "Registrasi Kartu",
           href: "/register-card",
           icon: DocumentAddIcon,
-          current: false,
         },
         {
           name: "Data Kartu",
           href: "/data-card",
           icon: DatabaseIcon,
-          current: false,
         },
       ];
 
@@ -125,7 +121,7 @@ export default function Dashboard({ title, children }) {
                       key={item.name}
                       href={item.href}
                       className={classNames(
-                        item.current
+                        item.href === router.pathname
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
                         "group flex items-center px-2 py-2 text-base font-medium rounded-md"
@@ -133,7 +129,7 @@ export default function Dashboard({ title, children }) {
                     >
                       <item.icon
                         className={classNames(
-                          item.current
+                          item.href === router.pathname
                             ? "text-gray-300"
                             : "text-gray-400 group-hover:text-gray-300",
                           "mr-4 h-6 w-6"
@@ -184,7 +180,7 @@ export default function Dashboard({ title, children }) {
                     key={item.name}
                     href={item.href}
                     className={classNames(
-                      item.current
+                      item.href === router.pathname
                         ? "bg-gray-900 text-white"
                         : "text-gray-300 hover:bg-gray-700 hover:text-white",
                       "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
@@ -192,7 +188,7 @@ export default function Dashboard({ title, children }) {
                   >
                     <item.icon
                       className={classNames(
-                        item.current
+                        item.href === router.pathname
                           ? "text-gray-300"
                           : "text-gray-400 group-hover:text-gray-300",
                         "mr-3 h-6 w-6"
