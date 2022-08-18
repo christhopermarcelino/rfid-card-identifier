@@ -26,11 +26,11 @@ export default function RegisterCard() {
   }, []);
 
   useEffect(() => {
-    setCardData(data?.data?.code);
+    setCardData(data?.data);
   }, [data]);
 
   const handlePairing = () => {
-    if (!cardData || !studentData) {
+    if (!cardData || !cardData?.code || !studentData) {
       alert("Data can not be empty!");
       return;
     }
@@ -39,7 +39,7 @@ export default function RegisterCard() {
 
     const data = {
       nim,
-      cardId: cardData,
+      cardId: cardData.code,
     };
 
     axios
@@ -65,7 +65,20 @@ export default function RegisterCard() {
             </>
           ) : data ? (
             <>
-              <p className='text-6xl font-bold tracking-wide'>{cardData}</p>
+              <p className='mb-4 text-5xl font-bold '>
+                {cardData?.code}
+                {cardData?.name && (
+                  <span className='text-2xl font-semibold'>{` (${cardData?.name})`}</span>
+                )}
+              </p>
+
+              <span
+                className={`${
+                  cardData?.isRegistered ? "bg-red-600" : "bg-green-600"
+                } text-lg mt-4 font-semibold tracking-wide text-white px-6 py-1 rounded-2xl`}
+              >
+                {cardData?.isRegistered ? "Sudah terdaftar" : "Belum terdaftar"}
+              </span>
             </>
           ) : (
             <div className='flex items-center justify-center h-24 bg-gray-200 rounded-md animate-pulse'>
