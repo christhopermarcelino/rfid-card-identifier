@@ -6,10 +6,18 @@ const { sendError, sendData, sendOk } = require("../libs/APIResponse");
 const getAllActivities = async (req, res) => {
   try {
     const allActivities = await prisma.activities.findMany({
-      include: {
+      select: {
+        time: true,
         card: {
-          include: {
-            student: true,
+          select: {
+            id: true,
+            nim: true,
+            name: true,
+            student: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
@@ -20,16 +28,11 @@ const getAllActivities = async (req, res) => {
       ],
     });
 
-    const datas = allActivities.map((item) => {
-      return {
-        time: item.time.toLocaleString(),
-        name: item.card.student.name,
-        nim: item.card.nim,
-        code: item.card.id,
-      };
+    allActivities.forEach((activity) => {
+      activity.time = activity.time.toLocaleString();
     });
 
-    sendData(res, datas);
+    sendData(res, allActivities);
   } catch (err) {
     sendError(res, err.message ?? undefined);
   }
