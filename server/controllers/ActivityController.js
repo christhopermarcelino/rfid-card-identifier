@@ -47,18 +47,18 @@ const addNewAcivity = async (req, res) => {
       },
     });
 
-    if (!card) return res.send("OFF");
-    if (!card?.nim) return res.send("OFF");
+    if (!card) return res.status(409).send("OFF");
+    if (!card?.nim) return res.status(409).send("OFF");
 
-    await prisma.activities.create({
+    const created = await prisma.activities.create({
       data: {
         code,
       },
     });
 
-    return res.send("OK");
+    return res.status(201).send("OK");
   } catch (err) {
-    return res.send("OFF");
+    return res.status(500).send("OFF");
   }
 };
 
