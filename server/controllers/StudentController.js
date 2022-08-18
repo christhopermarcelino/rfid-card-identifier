@@ -35,6 +35,7 @@ const getAllStudentsAndCards = async (req, res) => {
   try {
     const cards = await prisma.cards.findMany({
       select: {
+        id: true,
         nim: true,
         name: true,
         student: {
@@ -45,7 +46,9 @@ const getAllStudentsAndCards = async (req, res) => {
       },
     });
 
-    sendData(res, cards);
+    const filteredCards = cards.filter((card) => card.nim != null);
+
+    sendData(res, filteredCards);
   } catch (err) {
     sendError(res, err.message ?? undefined);
   }
