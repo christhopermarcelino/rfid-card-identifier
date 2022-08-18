@@ -6,8 +6,6 @@ const { sendError, sendOk, sendData } = require("../libs/APIResponse");
 const updateTemporaryCard = async (req, res) => {
   const { code } = req.query;
 
-  console.log(`Code = ${code}`);
-
   if (!code) return sendError(res, "Card code can not be empty!", 400);
 
   try {
@@ -15,8 +13,6 @@ const updateTemporaryCard = async (req, res) => {
       where: { id: 1 },
       data: { code },
     });
-
-    console.log(`Updated -> `, updated);
   } catch (err) {
     return sendError(res, err.message ?? undefined);
   }
