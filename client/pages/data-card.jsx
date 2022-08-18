@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 
 import Dashboard from "@/components/Dashboard";
-import SimpleAlertModal from "@/components/Modal";
+import Modal from "@/components/Modal";
 
 const removeConnectionTitle = "Apakah anda yakin?";
 const removeConnectionContent = "Anda akan menghapus data ini.";
@@ -158,7 +158,7 @@ export default function RegisterCard() {
                       ))}
                     </tbody>
                   </table>
-                  <SimpleAlertModal
+                  <Modal
                     open={open}
                     setOpen={setOpen}
                     title={removeConnectionTitle}

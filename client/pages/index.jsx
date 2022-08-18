@@ -11,24 +11,28 @@ import {
 
 import Dashboard from "@/components/Dashboard";
 import { useAuthState } from "@/contexts/AuthContext";
-import { bearerToken } from "@/libs/helpers";
+import Modal from "@/components/Modal";
 
 const columnHelper = createColumnHelper();
+
+const removeConnectionTitle = "Apakah anda yakin?";
+const removeConnectionContent =
+  "Anda akan menghapus semua data tabel aktivitas.";
 
 const columns = [
   columnHelper.accessor("time", {
     cell: (info) => info.getValue(),
     header: "Waktu",
   }),
-  columnHelper.accessor("name", {
-    cell: (info) => info.getValue(),
-    header: "Nama",
-  }),
-  columnHelper.accessor("nim", {
+  // columnHelper.accessor("card.student.name", {
+  //   cell: (info) => info.getValue() ?? '-',
+  //   header: "Nama",
+  // }),
+  columnHelper.accessor("card.nim", {
     cell: (info) => info.getValue(),
     header: "NIM",
   }),
-  columnHelper.accessor("code", {
+  columnHelper.accessor("card.name", {
     cell: (info) => info.getValue(),
     header: "Kode kartu",
   }),
@@ -38,8 +42,7 @@ export default function Home() {
   const { user } = useAuthState();
   const router = useRouter();
   const [tableData, setTableData] = useState([]);
-
-  axios.defaults.baseURL = "https://rfid-card-identifier.herokuapp.com/api";
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV === "production" && user === null) {
@@ -51,6 +54,7 @@ export default function Home() {
 
   const { data, error } = useSWR(
     "http://localhost:3001/api/activities",
+    // "https://rfid-card-identifier.herokuapp.com/api/activities",
     fetcher,
     {
       refreshInterval: 3000,
@@ -67,12 +71,39 @@ export default function Home() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const handleResetActivityTable = () => {
+    setOpen(true);
+
+    axios
+      .delete("http://localhost:3001/api/activities/reset")
+      // .get("https://rfid-card-identifier.herokuapp.com/api/activities/reset")
+      .then((res) => alert("Tabel berhasil direset"))
+      .catch((err) => alert(err.message ?? "Erorr occurred."))
+      .finally(() => setOpen(false));
+  };
+
   return (
     <div>
       <Dashboard title='Data Statistik'>
         <main>
           <div>
-            <h2 className='mb-4'>Tabel Aktivitas</h2>
+            <div className='flex items-start justify-between mb-5'>
+              <h2>Tabel Aktivitas</h2>
+              <button
+                type='button'
+                onClick={() => setOpen(true)}
+                className='inline-flex items-center px-4 py-2 text-sm font-medium border-2 rounded-md shadow-sm text-primary border-primary hover:bg-blue-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700'
+              >
+                Reset Tabel
+              </button>
+              <Modal
+                open={open}
+                setOpen={setOpen}
+                title={removeConnectionTitle}
+                content={removeConnectionContent}
+                action={handleResetActivityTable}
+              />
+            </div>
             <div className='flex flex-col'>
               <div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
                 <div className='inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8'>
