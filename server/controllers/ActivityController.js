@@ -80,4 +80,19 @@ const addNewAcivity = async (req, res) => {
   }
 };
 
-module.exports = { getAllActivities, updateDataCache, addNewAcivity };
+const resetActivities = async (req, res) => {
+  try {
+    await prisma.activities.deleteMany();
+
+    sendOk(res);
+  } catch (err) {
+    sendError(res, err.message ?? undefined);
+  }
+};
+
+module.exports = {
+  getAllActivities,
+  updateDataCache,
+  addNewAcivity,
+  resetActivities,
+};
