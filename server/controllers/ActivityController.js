@@ -47,7 +47,8 @@ const addNewAcivity = async (req, res) => {
       },
     });
 
-    if (!card || !card?.nim) return res.send("OFF");
+    if (!card) return res.send("OFF");
+    if (!card?.nim) return res.send("OFF");
 
     await prisma.activities.create({
       data: {
