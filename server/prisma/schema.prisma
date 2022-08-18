@@ -37,6 +37,7 @@ model Cards {
   id           String    @id @unique
   activated_at DateTime?
   nim          String?   @db.VarChar(30)
+  name         String?   @db.VarChar(20)
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now())
   deleted_at   DateTime?
