@@ -53,8 +53,7 @@ export default function Home() {
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data, error } = useSWR(
-    "http://localhost:3001/api/activities",
-    // "https://rfid-card-identifier.herokuapp.com/api/activities",
+    "https://rfid-card-identifier.herokuapp.com/api/activities",
     fetcher,
     {
       refreshInterval: 3000,
@@ -75,8 +74,7 @@ export default function Home() {
     setOpen(true);
 
     axios
-      .delete("http://localhost:3001/api/activities/reset")
-      // .get("https://rfid-card-identifier.herokuapp.com/api/activities/reset")
+      .delete("https://rfid-card-identifier.herokuapp.com/api/activities/reset")
       .then((res) => alert("Tabel berhasil direset"))
       .catch((err) => alert(err.message ?? "Erorr occurred."))
       .finally(() => setOpen(false));
