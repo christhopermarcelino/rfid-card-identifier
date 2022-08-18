@@ -59,6 +59,7 @@ const getAllStudentsAndCards = async (req, res) => {
 
     students.forEach((st) => {
       st["code"] = cardsObj[st.nim];
+      st["action"] = cardsObj[st.nim] ? true : false;
     });
 
     sendData(res, students);
