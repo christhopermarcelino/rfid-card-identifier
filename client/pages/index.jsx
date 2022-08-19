@@ -24,13 +24,13 @@ const columns = [
     cell: (info) => info.getValue(),
     header: "Waktu",
   }),
-  // columnHelper.accessor("card.student.name", {
-  //   cell: (info) => info.getValue() ?? '-',
-  //   header: "Nama",
-  // }),
   columnHelper.accessor("card.nim", {
     cell: (info) => info.getValue(),
     header: "NIM",
+  }),
+  columnHelper.accessor("card.student.name", {
+    cell: (info) => info.getValue(),
+    header: "Nama",
   }),
   columnHelper.accessor("card.name", {
     cell: (info) => info.getValue(),
