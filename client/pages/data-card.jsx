@@ -23,6 +23,8 @@ export default function RegisterCard() {
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState(null);
 
+  axios.defaults.baseURL = "https://rfid-card-identifier.herokuapp.com/api";
+
   const handleRemoveCardConnection = (e) => {
     if (!code) {
       alert("Code can not be empty!");
@@ -30,7 +32,7 @@ export default function RegisterCard() {
     }
 
     axios
-      .delete(`http://localhost:3001/api/card/remove?code=${code}`)
+      .delete(`/card/remove?code=${code}`)
       .then((res) => {
         alert("Success");
         router.reload();
@@ -78,7 +80,7 @@ export default function RegisterCard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/student/all-pair")
+      .get("/student/all-pair")
       .then((res) => setData(res.data.data))
       .catch((err) => alert(err.message));
   }, []);

@@ -22,6 +22,11 @@ const navigation =
           href: "/",
           icon: PresentationChartLineIcon,
         },
+        {
+          name: "Data Kartu",
+          href: "/data-card",
+          icon: DatabaseIcon,
+        },
       ]
     : [
         {
