@@ -26,7 +26,7 @@ export default function RegisterCard() {
   const [isLoading, setIsLoading] = useState(false);
   const fetchStatus = useRef(false);
 
-  axios.defaults.baseURL = "https://rfid-card-identifier`.herokuapp.com/api";
+  axios.defaults.baseURL = "https://rfid-card-identifier.herokuapp.com/api";
 
   const handleRemoveCardConnection = (e) => {
     if (!code) {
