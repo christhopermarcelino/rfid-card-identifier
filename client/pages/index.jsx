@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import toast from "react-hot-toast";
 
 import Dashboard from "@/components/Dashboard";
 import { useAuthState } from "@/contexts/AuthContext";
@@ -73,11 +74,18 @@ export default function Home() {
   const handleResetActivityTable = () => {
     setOpen(true);
 
-    axios
-      .delete("https://rfid-card-identifier.herokuapp.com/api/activities/reset")
-      .then((res) => alert("Tabel berhasil direset"))
-      .catch((err) => alert(err.message ?? "Erorr occurred."))
-      .finally(() => setOpen(false));
+    toast.promise(
+      axios
+        .delete(
+          "https://rfid-card-identifier.herokuapp.com/api/activities/reset"
+        )
+        .finally(() => setOpen(false)),
+      {
+        loading: "Loading",
+        success: "Data aktivitas berhasil direset",
+        error: (err) => err?.message ?? "Terjadi kesalahan saat mengambil data",
+      }
+    );
   };
 
   return (

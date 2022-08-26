@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import axios from "axios";
@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import toast from "react-hot-toast";
 
 import Dashboard from "@/components/Dashboard";
 import Modal from "@/components/Modal";
@@ -23,23 +24,29 @@ export default function RegisterCard() {
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const fetchStatus = useRef(false);
 
   axios.defaults.baseURL = "https://rfid-card-identifier`.herokuapp.com/api";
 
   const handleRemoveCardConnection = (e) => {
     if (!code) {
-      alert("Code can not be empty!");
+      toast.error("Kode kartu tidak boleh kosong!");
       return;
     }
 
-    axios
-      .delete(`/card/remove?code=${code}`)
-      .then((res) => {
-        alert("Success");
-        router.reload();
-      })
-      .catch((err) => alert(err.message ?? "Error occurred."))
-      .finally(() => setOpen(false));
+    toast.promise(
+      axios
+        .delete(`/card/remove?code=${code}`)
+        .then(() => {
+          axios.get("/student/all-pair").then((res) => setData(res.data.data));
+        })
+        .finally(() => setOpen(false)),
+      {
+        loading: "Loading",
+        success: "Data berhasil dihapus",
+        error: (err) => err?.message ?? "Terjadi kesalahan saat menghapus data",
+      }
+    );
   };
 
   const showConfirmationModal = (e) => {
@@ -79,20 +86,26 @@ export default function RegisterCard() {
     }),
   ];
 
-  useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get("/student/all-pair")
-      .then((res) => setData(res.data.data))
-      .catch((err) => alert(err.message))
-      .finally(() => setIsLoading(false));
-  }, []);
-
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  useEffect(() => {
+    if (fetchStatus.current) return;
+
+    toast.promise(
+      axios.get("/student/all-pair").then((res) => setData(res.data.data)),
+      {
+        loading: "Loading",
+        success: "Data berhasil diambil",
+        error: (err) => err?.message ?? "Terjadi kesalahan saat mengambil data",
+      }
+    );
+
+    fetchStatus.current = true;
+  }, []);
 
   return (
     <>

@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import { useAuthDispatch, useAuthState } from "@/contexts/AuthContext";
 import { bearerToken } from "@/libs/helpers";
@@ -24,7 +25,7 @@ export default function Signin() {
     e.preventDefault();
 
     if (!username || !password) {
-      alert("Username and password can not be empty");
+      toast.error("Username dan password tidak boleh kosong!");
       return;
     }
 
@@ -33,25 +34,29 @@ export default function Signin() {
       password,
     };
 
-    axios
-      .post("/auth/signin", data)
-      .then((res) => {
-        const token = res.data.data.token;
-        localStorage.setItem("token", token);
+    toast.promise(
+      axios
+        .post("/auth/signin", data)
+        .then((res) => {
+          const token = res.data.data.token;
+          localStorage.setItem("token", token);
 
-        return axios.post(
-          "/auth/get-user-info",
-          {},
-          { headers: { ...bearerToken() } }
-        );
-      })
-      .then((user) => {
-        dispatch("SIGNIN", { ...user.data.data });
-        router.replace("/");
-      })
-      .catch((err) => {
-        alert(err ?? "Error occured!");
-      });
+          return axios.post(
+            "/auth/get-user-info",
+            {},
+            { headers: { ...bearerToken() } }
+          );
+        })
+        .then((user) => {
+          dispatch("SIGNIN", { ...user.data.data });
+          router.replace("/");
+        }),
+      {
+        loading: "Loading",
+        success: "Selamat datang",
+        error: (err) => err?.message ?? "Terjadi kesalahan",
+      }
+    );
   };
 
   return (

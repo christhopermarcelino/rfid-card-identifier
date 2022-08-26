@@ -1,14 +1,16 @@
+import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
+import axios from "axios";
 import useSWR from "swr";
+import toast from "react-hot-toast";
 
 import Dashboard from "@/components/Dashboard";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 export default function RegisterCard() {
   const [students, setStudents] = useState([]);
   const [cardData, setCardData] = useState("");
   const [studentData, setStudentData] = useState(null);
+  const fetchStatus = useRef(false);
 
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -19,19 +21,32 @@ export default function RegisterCard() {
   );
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/api/student/available")
-      .then((res) => setStudents(res.data.data))
-      .catch((err) => alert(err.message));
+    if (fetchStatus.current) return;
+
+    toast.promise(
+      axios
+        .get("http://localhost:3001/api/student/available")
+        .then((res) => setStudents(res.data.data)),
+      {
+        loading: "Loading",
+        success: "Data mahasiswa berhasil diambil",
+        error: (err) => err?.message ?? "Terjadi kesalahan saat mengambil data",
+      }
+    );
+
+    fetchStatus.current = true;
   }, []);
 
   useEffect(() => {
-    setCardData(data?.data);
+    if (data?.data ?? "" != cardData) {
+      setCardData(data?.data);
+      toast.success("Kode kartu berhasil diperbarui");
+    }
   }, [data]);
 
   const handlePairing = () => {
     if (!cardData || !cardData?.code || !studentData) {
-      alert("Data can not be empty!");
+      toast.error("Data tidak boleh kosong!");
       return;
     }
 
@@ -42,10 +57,11 @@ export default function RegisterCard() {
       cardId: cardData.code,
     };
 
-    axios
-      .post("http://localhost:3001/api/card/pair", data)
-      .then((res) => alert(res?.data?.message))
-      .catch((err) => alert(err?.response?.data?.message ?? "Error occurred."));
+    toast.promise(axios.post("http://localhost:3001/api/card/pair", data), {
+      loading: "Loading",
+      success: "Mahasiswa dan kartu berhasil dihubungkan",
+      error: (err) => err?.message ?? "Terjadi kesalahan",
+    });
   };
 
   return (
