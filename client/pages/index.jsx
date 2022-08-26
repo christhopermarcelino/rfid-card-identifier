@@ -135,32 +135,43 @@ export default function Home() {
                         ))}
                       </thead>
                       <tbody>
-                        {table.getRowModel().rows.map((row, idx) => (
-                          <tr
-                            key={row.id}
-                            className={
-                              idx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                            }
-                          >
+                        {tableData.length == 0 ? (
+                          <tr>
                             <td
-                              key='no'
-                              className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'
+                              colSpan={5}
+                              className='px-6 py-4 text-sm font-bold text-center text-red-500 whitespace-nowrap'
                             >
-                              {idx + 1}
+                              Tidak ada data
                             </td>
-                            {row.getVisibleCells().map((cell) => (
+                          </tr>
+                        ) : (
+                          table.getRowModel().rows.map((row, idx) => (
+                            <tr
+                              key={row.id}
+                              className={
+                                idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                              }
+                            >
                               <td
-                                key={cell.id}
+                                key='no'
                                 className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'
                               >
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext()
-                                )}
+                                {idx + 1}
                               </td>
-                            ))}
-                          </tr>
-                        ))}
+                              {row.getVisibleCells().map((cell) => (
+                                <td
+                                  key={cell.id}
+                                  className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'
+                                >
+                                  {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext()
+                                  )}
+                                </td>
+                              ))}
+                            </tr>
+                          ))
+                        )}
                       </tbody>
                     </table>
                   </div>
