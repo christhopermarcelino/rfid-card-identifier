@@ -51,6 +51,12 @@ const removeCardConnection = async (req, res) => {
   const { code } = req.query;
 
   try {
+    await prisma.activities.deleteMany({
+      where: {
+        code,
+      },
+    });
+
     await prisma.cards.update({
       where: {
         id: code,
